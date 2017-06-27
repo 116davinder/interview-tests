@@ -15,7 +15,7 @@ Run the Docker container using below mentioned Command.
 docker run -p 7080:8080 -itd docker_test
 ```
 
-### To check Tomcat Server
+### To check Tomcat Server Status
 Open your browser
 
 ```
@@ -24,7 +24,7 @@ http://<ip address of host machine>:7080
 # Assignment 2
 This is shell Script to execute commands on remote hosts.
 
-### How Run it
+### How to Run Shell Script
 Make it Executeble first
 Using below mentioned command
 ```
