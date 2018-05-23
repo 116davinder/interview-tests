@@ -1,6 +1,10 @@
 # Challenge 1
 Create Subnet from given IP address and given total number of subnets.
 
+### Prerequisite
+```
+sipcalc-1.1.6 or higher on linux box. 
+```
 ### Usage
 ```
 bash subnetter.sh 192.168.0.0/24 2
