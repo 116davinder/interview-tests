@@ -2,17 +2,18 @@ from itertools import permutations
 
 a = [[1,0,0,0,0],
      [0,1,1,1,0],
-     [0,1,0,0,1],
+     [0,1,1,0,1],
      [1,0,1,1,1],
      [1,0,0,0,0]]
 
 activePointList = []
 battleShipFoundList = []
 toBeRemovedShipAfterAdjacentPointTest = []
-overLappingPointShipList = []
 diagonalPointShipList = []
 
-def printBattleShiplocation(locationList):
+def printBattleShiplocation(locationList, TestName=None):
+    if TestName is not None:
+        print(f"*"*25 + f": {TestName}")
     for ship in locationList:
         print(f"BattleShip Location is: {ship}")
 
@@ -47,12 +48,17 @@ else:
     print("No Battle Ship Found")
     exit
 
+# printBattleShiplocation(battleShipFoundList, "After collinearTest")
+
 # remove all duplicates from battleShipFoundList
 for ship in battleShipFoundList:
     pList = list(permutations(ship, r=3))
     for j in range(1,len(pList)):
+        # print("list is being removed")
         # print(list(list(pList)[j]))
         battleShipFoundList.remove(list(list(pList)[j]))
+
+# printBattleShiplocation(battleShipFoundList, "After Duplicate Removal")
 
 # remove ships points where points are collinear but not adjacent
 def adjacentTest(x1, y1, x2, y2, x3, y3):
@@ -76,6 +82,9 @@ for ship in battleShipFoundList:
 for ship in toBeRemovedShipAfterAdjacentPointTest:
     battleShipFoundList.remove(ship)
 
+# print after test
+# printBattleShiplocation(battleShipFoundList, "After adjacentTest")
+
 # diagonal ship edge case removal
 def diagonalShipTest(x1, y1, x2, y2, x3, y3):
     return (
@@ -95,19 +104,35 @@ for ship in battleShipFoundList:
 for ship in diagonalPointShipList:
     battleShipFoundList.remove(ship)
 
-# if 2d point used test by other ship removal
-if len(battleShipFoundList) > 1:
-    for i in range(len(battleShipFoundList)):
-        for j in range(i+1,len(battleShipFoundList)):
-            if ((battleShipFoundList[i][0] in battleShipFoundList[j]) or
-                (battleShipFoundList[i][1] in battleShipFoundList[j]) or
-                (battleShipFoundList[i][2] in battleShipFoundList[j])):
-                if battleShipFoundList[j] not in overLappingPointShipList:
-                    overLappingPointShipList.append(battleShipFoundList[j])
+# printBattleShiplocation(battleShipFoundList, "After diagonalShipTest")
 
-    # remove other ships from main ship list if there points are being by other ship
-    for ship in overLappingPointShipList:
-        battleShipFoundList.remove(ship)
+# if 2d point used test by other ship removal
+def overLappingPointsTest(battleShipList):
+    _overLappingPointShipList = []
+    if len(battleShipList) > 1:
+        for i in range(len(battleShipList)):
+            for j in range(i+1,len(battleShipList)):
+                if ((battleShipList[i][0] in battleShipList[j]) or
+                    (battleShipList[i][1] in battleShipList[j]) or
+                    (battleShipList[i][2] in battleShipList[j])):
+                    if len(_overLappingPointShipList) > 0:
+                        for io in range(len(_overLappingPointShipList)):
+                            for jo in range(i+1,len(_overLappingPointShipList)):
+                                if not ((_overLappingPointShipList[io][0] in _overLappingPointShipList[jo]) or
+                                        (_overLappingPointShipList[io][1] in _overLappingPointShipList[jo]) or
+                                        (_overLappingPointShipList[io][2] in _overLappingPointShipList[jo])):
+                                    _overLappingPointShipList.append(battleShipList[j])
+                    else:
+                        _overLappingPointShipList.append(battleShipList[j])
+
+        # remove other ships from main ship list if there points are being by other ship
+        for ship in _overLappingPointShipList:
+            battleShipList.remove(ship)
+
+        # printBattleShiplocation(_overLappingPointShipList, TestName="In overLappingPoints Test List")
+
+overLappingPointsTest(battleShipFoundList)
+# printBattleShiplocation(battleShipFoundList, TestName="After overLappingPointsTest")
 
 # Print ships location
 printBattleShiplocation(battleShipFoundList)
