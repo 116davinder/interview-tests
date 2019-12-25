@@ -1,14 +1,16 @@
 from itertools import permutations
 
-a = [[0,0,0,0,0],
+a = [[1,0,0,0,0],
      [0,1,1,1,0],
-     [0,0,0,0,0],
-     [1,1,1,0,1],
-     [0,0,0,0,0]]
+     [0,0,1,0,1],
+     [1,1,0,0,1],
+     [1,0,0,0,0]]
 
 activePointList = []
 battleShipFoundList = []
 toBeRemovedShipAfterAdjacentPointTest = []
+overLappingPointShipList = []
+diagonalPointShipList = []
 
 def printBattleShiplocation(locationList):
     for ship in locationList:
@@ -59,7 +61,8 @@ def adjacentTest(x1, y1, x2, y2, x3, y3):
             abs(x1 - x2) in (0,1) and
             abs(x2 - x3) in (0,1) and
             abs(y1 - y2) in (0,1) and
-            abs(y2 - y3) in (0,1))
+            abs(y2 - y3) in (0,1)
+    )
 
 # add battleship location to toBeRemovedShipAfterAdjacentPointTest
 # list if adjacentTest test fails
@@ -71,6 +74,25 @@ for ship in battleShipFoundList:
 
 # remove all ships from main ship list which failed adjacentTest
 for ship in toBeRemovedShipAfterAdjacentPointTest:
+    battleShipFoundList.remove(ship)
+
+# diagonal ship edge case removal
+def diagonalShipTest(x1, y1, x2, y2, x3, y3):
+    return (
+        abs(x1 - x2) == abs(x2 - x3) == 1 and
+        abs(y1 - y2) == abs(y2 - y3) == 1
+    )
+
+# add battleship location to diagonalPointShipList
+# list if diagonalShipTest test fails
+for ship in battleShipFoundList:
+    x1,y1,x2,y2,x3,y3 = ship[0][0], ship[0][1], ship[1][0], ship[1][1], ship[2][0], ship[2][1]
+    if diagonalShipTest(x1, y1, x2, y2, x3, y3):
+        # print(f"removed ship: {ship}")
+        diagonalPointShipList.append(ship)
+
+# remove all ships from main ship list which failed diagonalShipTest
+for ship in diagonalPointShipList:
     battleShipFoundList.remove(ship)
 
 # Print ships location
