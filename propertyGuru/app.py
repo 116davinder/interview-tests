@@ -43,9 +43,10 @@ else:
 for ship in battleShipFoundList:
     pList = list(permutations(ship, r=3))
     for j in range(1,len(pList)):
+        # print(list(list(pList)[j]))
         battleShipFoundList.remove(list(list(pList)[j]))
 
-# remove points where points are collinear but not adjacent
+# remove ships points where points are collinear but not adjacent
 def adjacentPointTest(x1, y1, x2, y2, x3, y3):
     if abs(x1 - x2 ) == abs(x2 - x3) and abs(y1 - y2) == abs(y3 - y2):
         return True
@@ -60,7 +61,7 @@ for ship in battleShipFoundList:
     x3 = ship[2][0]
     y3 = ship[2][1]
     if not adjacentPointTest(x1, y1, x2, y2, x3, y3):
-        print(f"removed ship: {ship}")
+        # print(f"removed ship: {ship}")
         battleShipFoundList.remove(ship)
 
 for ship in battleShipFoundList:
