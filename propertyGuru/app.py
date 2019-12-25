@@ -8,6 +8,11 @@ a = [[0,0,0,0,0],
 
 activePointList = []
 battleShipFoundList = []
+toBeRemovedShipAfterAdjacentPointTest = []
+
+def printBattleShiplocation(locationList):
+    for ship in locationList:
+        print(f"BattleShip Location is: {ship}")
 
 # find all active points on map
 for i in range(len(a)):
@@ -48,27 +53,25 @@ for ship in battleShipFoundList:
         battleShipFoundList.remove(list(list(pList)[j]))
 
 # remove ships points where points are collinear but not adjacent
-def adjacentPointTest(x1, y1, x2, y2, x3, y3):
-    if ( abs(x1 - x2 ) == 1 and 
-            abs(x2 - x3) == 1 and
-            abs(y1 - y2) == 1 and
-            abs(y3 - y2) == 1 ):
-        return True
-    else:
-        return False
+def adjacentTest(x1, y1, x2, y2, x3, y3):
+    return (abs(x1 - x2) == abs(x2 - x3) and 
+            abs(y1 - y2) == abs(y2 - y3) and
+            abs(x1 - x2) in (0,1) and
+            abs(x2 - x3) in (0,1) and
+            abs(y1 - y2) in (0,1) and
+            abs(y2 - y3) in (0,1))
 
+# add battleship location to toBeRemovedShipAfterAdjacentPointTest
+# list if adjacentTest test fails
 for ship in battleShipFoundList:
-    x1 = ship[0][0]
-    y1 = ship[0][1]
-    x2 = ship[1][0]
-    y2 = ship[1][1]
-    x3 = ship[2][0]
-    y3 = ship[2][1]
-    if not adjacentPointTest(x1, y1, x2, y2, x3, y3):
-        print(f"removed ship: {ship}")
-        battleShipFoundList.remove(ship)
+    x1,y1,x2,y2,x3,y3 = ship[0][0], ship[0][1], ship[1][0], ship[1][1], ship[2][0], ship[2][1]
+    if not adjacentTest(x1, y1, x2, y2, x3, y3):
+        # print(f"removed ship: {ship}")
+        toBeRemovedShipAfterAdjacentPointTest.append(ship)
 
-for ship in battleShipFoundList:
-    print(f"BattleShip Location is: {ship}")
+# remove all ships from main ship list which failed adjacentTest
+for ship in toBeRemovedShipAfterAdjacentPointTest:
+    battleShipFoundList.remove(ship)
 
-# 2d point used test by other ship
+# Print ships location
+printBattleShiplocation(battleShipFoundList)
