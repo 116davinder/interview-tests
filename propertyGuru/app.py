@@ -2,8 +2,8 @@ from itertools import permutations
 
 a = [[1,0,0,0,0],
      [0,1,1,1,0],
-     [0,0,1,0,1],
-     [1,1,0,0,1],
+     [0,1,0,0,1],
+     [1,0,1,1,1],
      [1,0,0,0,0]]
 
 activePointList = []
@@ -94,6 +94,20 @@ for ship in battleShipFoundList:
 # remove all ships from main ship list which failed diagonalShipTest
 for ship in diagonalPointShipList:
     battleShipFoundList.remove(ship)
+
+# if 2d point used test by other ship removal
+if len(battleShipFoundList) > 1:
+    for i in range(len(battleShipFoundList)):
+        for j in range(i+1,len(battleShipFoundList)):
+            if ((battleShipFoundList[i][0] in battleShipFoundList[j]) or
+                (battleShipFoundList[i][1] in battleShipFoundList[j]) or
+                (battleShipFoundList[i][2] in battleShipFoundList[j])):
+                if battleShipFoundList[j] not in overLappingPointShipList:
+                    overLappingPointShipList.append(battleShipFoundList[j])
+
+    # remove other ships from main ship list if there points are being by other ship
+    for ship in overLappingPointShipList:
+        battleShipFoundList.remove(ship)
 
 # Print ships location
 printBattleShiplocation(battleShipFoundList)
