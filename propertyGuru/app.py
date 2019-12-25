@@ -3,7 +3,7 @@ from itertools import permutations
 a = [[0,0,0,0,0],
      [0,1,1,1,0],
      [0,0,0,0,0],
-     [1,0,0,0,0],
+     [1,1,1,0,0],
      [0,1,0,0,0]]
 
 activePointList = []
@@ -22,9 +22,12 @@ def collinear(x1, y1, x2, y2, x3, y3):
     else:
         return False
 
+battleShipFoundList = []
+
 if len(activePointList) >= 3:
-    allPossibleLocations = list(permutations(activePointList, 3))
-    for i in allPossibleLocations:
+    allLocations = list(permutations(activePointList, r=3))
+    # print(allLocations)
+    for i in allLocations:
         x1 = list(i)[0][0]
         y1 = list(i)[0][1]
         x2 = list(i)[1][0]
@@ -32,6 +35,16 @@ if len(activePointList) >= 3:
         x3 = list(i)[2][0]
         y3 = list(i)[2][1]
         if collinear(x1, y1, x2, y2, x3, y3):
-            print(f"BattleShip Location is: {list(i)}")
+            battleShipFoundList.append(list(i))
+            # print(f"BattleShip Location is: {list(i)}")
 else:
     print("No Battle Ship Found")
+
+# remove all duplicates from battleShipFoundList
+for ship in battleShipFoundList:
+    pList = list(permutations(ship, r=3))
+    print(len(pList))
+    for j in range(1,len(pList)):
+        battleShipFoundList.remove(list(list(pList)[j]))
+
+print(battleShipFoundList)
