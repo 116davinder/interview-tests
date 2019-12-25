@@ -3,12 +3,13 @@ from itertools import permutations
 a = [[0,0,0,0,0],
      [0,1,1,1,0],
      [0,0,0,0,0],
-     [1,1,1,0,0],
-     [0,1,0,0,0]]
+     [1,1,1,0,1],
+     [0,0,0,0,0]]
 
 activePointList = []
 battleShipFoundList = []
 
+# find all active points on map
 for i in range(len(a)):
     for j in range(len(a)):
         if a[i][j] == 1:
@@ -48,7 +49,10 @@ for ship in battleShipFoundList:
 
 # remove ships points where points are collinear but not adjacent
 def adjacentPointTest(x1, y1, x2, y2, x3, y3):
-    if abs(x1 - x2 ) == abs(x2 - x3) and abs(y1 - y2) == abs(y3 - y2):
+    if ( abs(x1 - x2 ) == 1 and 
+            abs(x2 - x3) == 1 and
+            abs(y1 - y2) == 1 and
+            abs(y3 - y2) == 1 ):
         return True
     else:
         return False
@@ -61,8 +65,10 @@ for ship in battleShipFoundList:
     x3 = ship[2][0]
     y3 = ship[2][1]
     if not adjacentPointTest(x1, y1, x2, y2, x3, y3):
-        # print(f"removed ship: {ship}")
+        print(f"removed ship: {ship}")
         battleShipFoundList.remove(ship)
 
 for ship in battleShipFoundList:
     print(f"BattleShip Location is: {ship}")
+
+# 2d point used test by other ship
