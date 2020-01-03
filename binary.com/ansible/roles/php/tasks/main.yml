@@ -1,0 +1,15 @@
+---
+
+- name: install php if doesn`t exits
+  package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - php
+    - php-dev
+
+# - name: install php extensions mcrypt and mbstring
+#   shell: "{{ item }}"
+#   loop:
+#     - pecl install mcrypt
+#     - pecl install mbstring

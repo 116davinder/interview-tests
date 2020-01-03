@@ -1,0 +1,10 @@
+---
+
+- hosts: localhost
+  become: true
+  roles:
+    - php
+    - mysql
+    - phpmyadmin
+    - apache2
+

@@ -1,0 +1,28 @@
+---
+
+- name: install apache2 if doesn`t exits
+  package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - apache2
+
+- name: temp login for jsmith using .htacess for phpmyadmin
+  template:
+    src: htpasswd
+    dest: /etc/phpmyadmin/htpasswd.setup
+
+- name: configuration for phpmyadmin in /etc/apache2/conf-enabled folder
+  template:
+    src: phpmyadmin.conf
+    dest: /etc/apache2/conf-enabled/phpmyadmin.conf
+
+- name: update security.conf for apache2
+  template:
+    src:  security.conf
+    dest: /etc/apache2/conf-available/security.conf
+
+- name: restart apache2
+  service:
+    name: apache2
+    state: restarted
