@@ -5,3 +5,6 @@ It should be modified
 2. send request to upstream server
 3. recieve response from upstream server
 4. send response to DNS Query ( To Socket Stream )
+
+Ref:
+1. https://developers.google.com/speed/public-dns/docs/secure-transports
