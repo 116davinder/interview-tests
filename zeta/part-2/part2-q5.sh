@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC2086
+
 # Usage:
 #     part2-q5.sh cpu/mem <filename>
 
@@ -10,7 +12,7 @@ function join_words() {
   do
     a=$a"$i"",";
   done;
-  echo $a
+  echo "$a"
 }
 # check if user is root or not
 # sudo/root is rquired to fetch proces name with SS tool
@@ -29,7 +31,7 @@ else
 fi
 
 # hardcoded pick only 3rd from top
-process_details=$(ps -eo pid,%mem,%cpu,comm --sort=-%$PROCESS_SORT | sed -n '4p')
+process_details=$(ps -eo pid,%mem,%cpu,comm --sort=-%"$PROCESS_SORT" | sed -n '4p')
 
 # find pid/cpu/mem/process name
 pid=$(echo $process_details | cut -d " " -f1)
@@ -40,14 +42,14 @@ process_name=$(echo $process_details | cut -d " " -f4)
 # list local listening port by pid
 local_listen_port_details=$(ss -ntulp4 state LISTENING | grep -i "pid=$pid")
 
-count_lines=$(ss -ntulp4 state LISTENING | grep -i "pid=$pid" | wc -l)
+count_lines=$(ss -ntulp4 state LISTENING | grep -ic "pid=$pid")
 
-# compare how local ports are listening for given process
-if [ $count_lines -eq 0 ];
+# compare how many local ports are listening for given process
+if [ "$count_lines" -eq 0 ];
 then
   port=""
 else
-  if [ $count_lines -eq 1 ];
+  if [ "$count_lines" -eq 1 ];
   then
     port=$(echo -n $local_listen_port_details |  awk '{print $4}' | cut -d ":" -f2)
   else
