@@ -1,0 +1,7 @@
+---
+
+- name: "Logrotate | Install"
+  ansible.builtin.include_tasks: "install.yml"
+
+- name: "Logrotate | Configure"
+  ansible.builtin.include_tasks: "configure.yml"

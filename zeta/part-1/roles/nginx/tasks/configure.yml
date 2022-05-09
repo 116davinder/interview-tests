@@ -1,0 +1,24 @@
+---
+
+- name: "Nginx | Configure | upload nginx confs from variables"
+  ansible.builtin.copy:
+    content: "{{ item.content }}"
+    dest: "{{ item.dest }}"
+    backup: "{{ item.backup | default(true) }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: "{{ item.mode | default('0644') }}"
+    src: "{{ item.src | default(omit) }}"
+  loop: "{{ nginx_confs }}"
+
+- name: "Nginx | Configure | validate nginx confgs"
+  ansible.builtin.command: "nginx -t"
+  register: "_nginx_validate"
+
+- debug:
+    var: _nginx_validate
+
+- name: "Nginx | Configure | Check if nginx validation failed"
+  ansible.builtin.assert:
+    that: "_nginx_validate.rc == 0 | int"
+    fail_msg: "Nginx Validation failed with error: {{ _nginx_validate.stderr }}"

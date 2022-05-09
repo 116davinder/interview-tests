@@ -1,0 +1,12 @@
+---
+
+- block:
+  - name: "Nginx | Prepare | Install system dependency (Ubuntu)"
+    ansible.builtin.apt:
+      name: "{{ item }}"
+      state: "present"
+    loop:
+      - "ca-certificates"
+      - "apt-transport-https"
+      - "gpg-agent"
+  when: ansible_distribution == "Ubuntu"

@@ -1,0 +1,34 @@
+---
+
+- name: "Logrotate | Configure | upload logrotate confs from variables"
+  ansible.builtin.copy:
+    content: "{{ item.content }}"
+    dest: "{{ item.dest }}"
+    backup: "{{ item.backup | default(true) }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: "{{ item.mode | default('0644') }}"
+    src: "{{ item.src | default(omit) }}"
+  loop: "{{ logrotate_confs }}"
+
+- name: "Logrotate | Configure | find logrotate cron file"
+  ansible.builtin.find:
+    paths: "/etc/"
+    recurse: true
+    file_type: "file"
+    patterns: 'logrotate'
+  register: "_logrotate_cron"
+
+- name: "Logrotate | Configure | set logrotate script path"
+  ansible.builtin.set_fact:
+    logrotate_script_path: "{{ _logrotate_cron.files[0].path }}"
+    logrotate_script_dest_path: "/etc/cron.{{ logrotate_cron_time }}/logrotate"
+  when: "_logrotate_cron.matched > 0 | int"
+
+- name: "Logrotate | Configure | Copy Logrotate to {{ logrotate_cron_time }} Cron"
+  ansible.builtin.copy:
+    remote_src: true
+    src: "{{ logrotate_script_path }}"
+    dest: "{{ logrotate_script_dest_path }}"
+    mode: "0755"
+  when: "logrotate_script_path != logrotate_script_dest_path"

@@ -1,0 +1,28 @@
+---
+
+- name: "Nginx | Install prequisites"
+  ansible.builtin.include_tasks: "prepare.yml"
+
+- name: "Nginx | Install Nginx"
+  ansible.builtin.include_tasks: "install.yml"
+
+- name: "Nginx | Configure Nginx"
+  ansible.builtin.include_tasks: "configure.yml"
+
+- name: "Nginx | Post Installation"
+  ansible.builtin.include_tasks: "post-install.yml"
+  when: "not nginx_run_via_container"
+
+- name: "Nginx | Start Nginx via Container"
+  community.docker.docker_container:
+    name: "{{ nginx_container_name }}"
+    image: "{{ nginx_container_image }}"
+    restart_policy: "always"
+    ports:
+     - "{{ nginx_port }}:{{ nginx_port }}"
+    volumes:
+      - "/etc/nginx/conf.d/:/etc/nginx/conf.d/"
+      - "/usr/share/nginx/html/:/usr/share/nginx/html/"
+    comparisons:
+      volumes: allow_more_present
+  when: "nginx_run_via_container"

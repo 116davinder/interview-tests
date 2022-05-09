@@ -1,0 +1,18 @@
+---
+
+- name: "Docker | Prepare | Install system dependency (Ubuntu)"
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: "present"
+    update_cache: true
+  loop:
+    - "ca-certificates"
+    - "curl"
+    - "gnupg"
+    - "lsb-release"
+    - "software-properties-common"
+    - "apt-transport-https"
+    - "virtualenv"
+    - "python3-pip"
+    - "python3-setuptools"
+  when: ansible_distribution == "Ubuntu"

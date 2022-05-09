@@ -1,0 +1,19 @@
+---
+
+- name: "Docker | Post-Install | Add Users to Docker Group"
+  ansible.builtin.user:
+    name: "{{ item }}"
+    groups: ["docker"]
+    append: true
+  loop: "{{ docker_user_list }}"
+
+- name: "Docker | Post-Install | Install docker package via pip"
+  ansible.builtin.pip:
+    name: "docker"
+    state: "present"
+
+- name: "Docker  | Post-Install | Make Sure docker service is running"
+  ansible.builtin.systemd:
+    name: "docker"
+    state: "started"
+    enabled: true

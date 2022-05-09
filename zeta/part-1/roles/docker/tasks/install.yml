@@ -1,0 +1,23 @@
+---
+
+- block:
+  - name: "Docker | Install | Add Docker Gpg Key (Ubuntu)"
+    ansible.builtin.apt_key:
+      url: "https://download.docker.com/linux/ubuntu/gpg"
+      state: "present"
+
+  - name: "Docker | Install | Add repo (Ubuntu)"
+    ansible.builtin.apt_repository:
+      repo: "deb [arch=amd64] https://download.docker.com/{{ ansible_system | lower }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
+      state: "present"
+
+  - name: "Docker | Install | install docker-ce (Ubuntu)"
+    ansible.builtin.apt:
+      name: "{{ item }}"
+      update_cache: yes
+    loop:
+      - "docker-ce"
+      - "docker-ce-cli"
+      - "containerd.io"
+      - "docker-compose-plugin"
+  when: ansible_distribution == "Ubuntu"

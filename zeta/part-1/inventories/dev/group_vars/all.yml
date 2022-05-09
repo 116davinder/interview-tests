@@ -1,0 +1,55 @@
+---
+
+# docker role variables
+docker_user_list: ["vagrant"]
+
+# nginx role variables
+nginx_version: "1.20.2"
+nginx_port: 8080
+nginx_confs:
+  - dest: "/etc/nginx/conf.d/default.conf"
+    backup: false
+    content: |
+      server {
+          listen       {{ nginx_port }};
+          server_name  localhost;
+
+          location / {
+              root   /usr/share/nginx/html;
+              index  index.html index.htm;
+          }
+          error_page   500 502 503 504  /50x.html;
+          location = /50x.html {
+              root   /usr/share/nginx/html;
+          }
+      }
+  - dest: "/usr/share/nginx/html/index.html"
+    backup: false
+    mode: "0644"
+    owner: "root"
+    group: "root"
+    content: |
+      Installed by Ansible!
+      Creation Date: {{ ansible_date_time.date }}!
+
+# will check with Interviewer
+nginx_run_via_container: true
+nginx_container_image: "nginx:stable-alpine"
+nginx_container_name: "nginx"
+
+# logrotate variables
+logrotate_cron_time: "hourly"   #daily/hourly/weekly/monthly
+
+logrotate_confs:
+  - dest: "/etc/logrotate.d/docker-container"
+    backup: false
+    content: |
+      /var/lib/docker/containers/*/*.log {
+        size 100M
+        rotate 7
+        hourly
+        compress
+        missingok
+        delaycompress
+        copytruncate
+      }

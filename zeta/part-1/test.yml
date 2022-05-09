@@ -1,0 +1,36 @@
+---
+
+- hosts: dev
+  become: true
+  tasks:
+    - name: "Test | Gather the package facts"
+      ansible.builtin.package_facts:
+        manager: auto
+
+    - name: "Test | Check if Docker Community package is installed"
+      ansible.builtin.assert:
+        that: "'docker-ce' in ansible_facts.packages"
+        fail_msg: "docker-ce package not found in system packages"
+
+    - name: "Test | Check if Nginx package is installed"
+      ansible.builtin.assert:
+        that: "'nginx' in ansible_facts.packages"
+        fail_msg: "nginx package not found in system packages"
+
+    - name: "Test | Check if Logrotate package is installed"
+      ansible.builtin.assert:
+        that: "'logrotate' in ansible_facts.packages"
+        fail_msg: "logrotate package not found in system packages"
+
+    - name: "Test | Fetch data from Nginx Port"
+      uri:
+        url: "http://localhost:{{ nginx_port }}"
+        return_content: true
+      register: "_nginx"
+
+    - name: "Test | Check if Nginx Return Correct Page and status code"
+      ansible.builtin.assert:
+        that:
+          - "'Installed by Ansible' in _nginx.content"
+          - "200 == _nginx.status | int"
+        fail_msg: "logrotate package not found in system packages"

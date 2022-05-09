@@ -1,0 +1,10 @@
+---
+
+- name: "Docker | Install prequisites"
+  ansible.builtin.include_tasks: "prepare.yml"
+
+- name: "Docker | Install Docker"
+  ansible.builtin.include_tasks: "install.yml"
+
+- name: "Docker | Post Installation"
+  ansible.builtin.include_tasks: "post-install.yml"

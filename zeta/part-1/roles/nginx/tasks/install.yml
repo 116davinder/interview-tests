@@ -1,0 +1,27 @@
+---
+
+- block:
+  - name: "Nginx | Install | Add Nginx Gpg Key (Ubuntu)"
+    ansible.builtin.apt_key:
+      url: "http://nginx.org/keys/nginx_signing.key"
+
+  - name: "Nginx | Install | Add repo (Ubuntu)"
+    ansible.builtin.apt_repository:
+      repo: "deb http://nginx.org/packages/{{ ansible_distribution|lower }}/ {{ ansible_distribution_release|lower }} nginx"
+      state: "present"
+
+  - name: "Nginx | Install | set nginx package name with version"
+    ansible.builtin.set_fact:
+      nginx_package_name: "nginx={{ nginx_version }}*"
+    when: nginx_version is defined
+
+  - name: "Nginx | Install | set default nginx package name"
+    ansible.builtin.set_fact:
+      nginx_package_name: "nginx"
+    when: nginx_version is not defined
+
+  - name: "Nginx | Install | install nginx (Ubuntu)"
+    ansible.builtin.apt:
+      name: "{{ nginx_package_name }}"
+      update_cache: yes
+  when: ansible_distribution == "Ubuntu"

@@ -1,0 +1,9 @@
+---
+
+- name: "Logrotate | Install | install logrotate package"
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: "latest"
+    update_cache: yes
+  loop:
+    - "logrotate"

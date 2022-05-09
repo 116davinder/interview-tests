@@ -1,0 +1,7 @@
+---
+
+- name: "Nginx  | Post-Install | Make Sure nginx service is running"
+  ansible.builtin.systemd:
+    name: "nginx"
+    state: "started"
+    enabled: true
