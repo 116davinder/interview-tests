@@ -8,3 +8,5 @@ It should be modified
 
 Ref:
 1. https://developers.google.com/speed/public-dns/docs/secure-transports
+2. https://snippets.cacher.io/snippet/3a345e8dec90c87abdb8
+3. 
