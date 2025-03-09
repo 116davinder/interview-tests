@@ -1,0 +1,17 @@
+# Input Conditions of Questions
+################################
+# certificate expiry
+# certificate less than 30 days
+# cert renewal
+# upload to ACM
+
+
+################################
+# Logical steps in bash pseudo code
+################################
+1. openssl -x509 -print (date)
+2. compare the date and take decision ( wether to renew )
+3. csr.conf - CSR
+4. openssl and csr.conf ( private key and public key )
+5. import the AWS credentials ( environments or anyways )
+6. aws cli to upload to ACM in given region
