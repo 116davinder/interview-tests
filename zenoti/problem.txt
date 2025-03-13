@@ -1,0 +1,12 @@
+
+- A global multi region website, with same data synced across regions. The user browsing from US and india will have the same experience and data
+
+- Build a highlevel arch diagram
+- Focus on network isolation, communication and security
+- Focus on automation and CI/CD. What tools and processes will you follow to ensure zero downtime?
+- Focus on monitoring. What tools will be used and what are few important metrics to track?
+
+
+
+Assumptions:
+1. Data replication across regions
