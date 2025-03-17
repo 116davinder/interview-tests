@@ -1,5 +1,7 @@
 """
-NASA runs the Near Earth Object Web Service, which is a RESTful web service for near earth Asteroid information.  A user can search for Asteroids based on their closest approach date to Earth,  look up a specific Asteroid with its NASA JPL small body id, as well as browse the overall data-set.
+NASA runs the Near Earth Object Web Service, which is a RESTful web service for near earth Asteroid information.  
+A user can search for Asteroids based on their closest approach date to Earth, 
+look up a specific Asteroid with its NASA JPL small body id, as well as browse the overall data-set.
 
 The full API docs are at https://api.nasa.gov/index.html 
 
