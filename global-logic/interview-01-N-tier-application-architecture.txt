@@ -1,0 +1,51 @@
+----------------------
+1. 3 tier application - monolith apps (VM)
+2. 600 aws deployment
+
+
+0. AWS Account structure and network structure
+1. ZTD
+2. cost saving
+
+
+AWS Landing Zone
+-------------------
+1. security / logging/ audit
+
+2. shared services ( CD / CI / Artifacts / Monitoring / Logging )
+
+3. customer N
+
+
+AWS Network Arch
+-------------------
+1. VPC - SS
+2. Customer VPCs - each account ( public/private/db )
+
+
+ZTD
+-----
+Web 
+- aws launch template ( store configurations ) - Changes + artifacts
+- aws autoscaling group - ( instance refresh + cool down period (5minutes)  - 3 ec2 instance)
+- aws s3 bucket ( unique-folder/version/static - it marked static )
+- Application LB
+- AWS CloudFront CDN ( Fastly, Akamai )
+
+App
+- aws launch template ( store configurations )
+- aws autoscaling group 
+- App LB
+
+DB
+- RDS ( Upgrade instance )
+
+-------------------
+User --- CDN --- Application LB / S3 Webserver -> Appp -> DB
+
+
+user1.example.com ( Wildcard - Application )
+user2.example.com
+
+
+*.example.com - CDN/APP LB ( IP, FQDN )
