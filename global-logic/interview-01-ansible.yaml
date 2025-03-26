@@ -1,0 +1,26 @@
+---
+
+- hosts: localhost
+  tasks:
+    - name: create sg in aws
+      community.aws.aws_security_group:
+       name: test-sg
+       subnet/vpc-id: test-vpc/subnet-id
+       rules:
+        - src: 0.0.0.0/0
+          dst: 0.0.0.0/0
+          port: 22
+       register: _test_sg
+
+    - name: create ec2 instance
+      community.aws.aws_ec2_instace:
+        name: test-instance
+        ami: ami-xxxxxx
+        sg: _test_instance
+      register: _test_instance
+
+    - name: show the ec2 instance IP
+      debug:
+        var: _test_instance.public_ip_address
+
+
