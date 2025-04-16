@@ -1,0 +1,67 @@
+Welcome to CloudCompany! We've developed a world-class server that can respond "Hello World" to authenticated users when a client makes a GET request. We think the whole world should have access to this, but, unfortunately, lack the resources to deploy this.
+From our understanding we want to use an Infrastructure-as-Code (IaC) tool to build out our infrastructure in some cloud provider, but we're not sure which one on both accounts. Could you walk us through which cloud provider and IaC tool you'd use and draw out the deployment strategy?
+
+
+Binary with S3
+
+1. CI - Container Based Application
+
+Cloud - AWS
+
+- Infrastructure - AWS ECS ( Host ) ( CPU and memory ) ( US )
+- Networking ( AWS ALB + WAF ) ( aws-qqqaw.elb.amazon.com ) (Optional: Static Public IP)
+
+- Infrastructure - AWS ECS ( Host ) ( CPU and memory ) ( ASIA )
+- Networking ( AWS ALB + WAF ) ( aws-qqqaw.elb.amazon.com ) (Optional: Static Public IP)
+
+- example.com ( Route53 - Public Zone )
+
+
+Japan -- US ( 300ms )
+AWS Edge - US ( 250ms )
+
+
+
+3 Region
+- Kubernetes
+- Deployment
+
+User --> ALB+WAF --> ECS Service ( Web Self Cert )
+
+
+AWS Cognito
+User --> AWS API Gateway --> ECS Service ( Web Public Cert )
+
+
+
+1. Terraform Modules
+1.1 VPC ( Folder )
+vpc.tf
+subnets.tf
+route-tables.tf
+nat.tf
+provider.tf
+variables.tf
+outputs.tf
+backend.tf
+
+1.2 ECS Cluster
+1.3 ECS Task + Service
+1.4 ALB+WAF
+1.5 Route 53 ( Zone, create/update records )
+
+
+Terragrunt
+
+<Region>/vpc ( 
+<Region>/ecs
+<Region>/routes-53
+<Region>/backend
+
+
+Statefiles
+<region>/vpc/statefile
+<Region-1>/vpc
+<Region-2>/ecs
+<Region>/routes-53
+
